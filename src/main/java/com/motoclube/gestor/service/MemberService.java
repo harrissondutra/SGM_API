@@ -108,4 +108,26 @@ public class MemberService {
             throw new RuntimeException("Member not found with id: " + memberId);
         }
     }
+
+    public MemberDto updateMember(Long id, MemberData memberData) {
+        Optional<Member> optionalMember = repository.findById(id);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            member.setName(memberData.getName());
+            member.setPhone(memberData.getPhone());
+            member.setAddress(memberData.getAddress());
+            member.setAddress(memberData.getAddress());
+            repository.save(member);
+            return modelMapper.map(member, MemberDto.class);
+        } else {
+            throw new RuntimeException("Member not found with id: " + id);
+        }
+    }
+
+    public MemberData updateActive(Long id) {
+        var member = repository.findById(id).orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
+        member.setActive(!member.getActive());
+        repository.save(member);
+        return modelMapper.map(member, MemberData.class);
+    }
 }

@@ -21,7 +21,7 @@ public class TokenService {
     @Value("${api.security.jwt.expiration}")  
     private Integer expiration;  
   
-    private static final String ISSUER = "Abutres SGM";
+    private static final String ISSUER = "SGM";
   
     public String generateToken(User user) {
             try {  

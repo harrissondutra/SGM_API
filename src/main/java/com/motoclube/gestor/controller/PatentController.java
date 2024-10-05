@@ -23,6 +23,7 @@ public class PatentController {
         this.service = service;
     }
 
+    @Operation(summary = "Get patents")
     @GetMapping("/{size}")
     public ResponseEntity<List<PatentData>> getPatents(@PathVariable Integer size) {
         Pageable pageable = PageRequest.of(0, size);
