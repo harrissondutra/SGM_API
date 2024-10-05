@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS build
+FROM ubuntu:latest
 LABEL authors="Harrisson Dutra"
 
 RUN apt-get update
