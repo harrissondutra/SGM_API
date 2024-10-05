@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,6 +27,9 @@ public class PatentService {
 
     @Transactional
     public PatentDataDetails createPatent(PatentData patentData) {
+        if (patentData == null) {
+            throw new IllegalArgumentException("Dados da patente não podem ser nulos");
+        }
         Patent patent = new Patent(patentData);
         repository.save(patent);
         return modelMapper.map(patent, PatentDataDetails.class);
@@ -33,18 +37,27 @@ public class PatentService {
 
     @Transactional
     public PatentData updatePatent(Long memberId, Long patentId) {
-        var patent = repository.findById(patentId).orElseThrow(() -> new RuntimeException("Patent not found with id: " + patentId));
+        if (patentId == null) {
+            throw new IllegalArgumentException("Id da patente não pode ser nulo");
+        }
+        var patent = repository.findById(patentId).orElseThrow(() -> new ResourceNotFoundException("Patente não encontrada com o id: " + patentId));
         patent.setId(patentId);
         repository.save(patent);
         return modelMapper.map(patent, PatentData.class);
     }
 
     public PatentData getPatentById(Long patentId) {
-        return modelMapper.map(repository.findById(patentId).orElseThrow(() -> new RuntimeException("Patent not found with id: " + patentId)), PatentData.class);
+        if (patentId == null) {
+            throw new IllegalArgumentException("Id da patente não pode ser nulo");
+        }
+        return modelMapper.map(repository.findById(patentId).orElseThrow(() -> new ResourceNotFoundException("Patente não encontrada com o id: " + patentId)), PatentData.class);
     }
 
     @Transactional
     public void deletePatent(Long patentId) {
+        if (patentId == null) {
+            throw new IllegalArgumentException("Id da patente não pode ser nulo");
+        }
         repository.deleteById(patentId);
     }
 }

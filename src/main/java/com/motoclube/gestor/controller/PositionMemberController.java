@@ -5,6 +5,8 @@ import com.motoclube.gestor.model.to.PositionMemberData;
 import com.motoclube.gestor.model.to.PositionMemberDataDetails;
 import com.motoclube.gestor.service.PositionMemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +36,44 @@ public class PositionMemberController {
     }
 
     @Operation(summary = "Criar uma nova posição", description = "Criar uma nova posição")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Posição cadastrada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Posição não encontrada")
+    })
     @PostMapping
     public ResponseEntity<PositionMemberDataDetails> createPositionMember(@RequestBody PositionMemberData positionMemberData) {
         return ResponseEntity.created(null).body(service.createPositionMember(positionMemberData));
     }
     @Operation(summary = "Obter posição por ID", description = "Obter posição por ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Posição encontrada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Posição não encontrada")
+    })
     @GetMapping("/getById/{id}")
     public ResponseEntity<PositionMemberDataDetails> getPositionMemberById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getPositionMemberById(id));
     }
 
+    @Operation(summary = "Deletar posição", description = "Deletar posição")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Posição deletada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Posição não encontrada")
+    })
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deletePositionMember(@PathVariable Long id) {
         service.deletePositionMember(id);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Atualizar posição", description = "Atualizar posição")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Posição atualizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Posição não encontrada")
+    })
     @PutMapping("/update/{id}")
     public ResponseEntity<PositionMemberDataDetails> updatePositionMember(@PathVariable Long id, @RequestBody PositionMemberData positionMemberData) {
         return ResponseEntity.ok(service.updatePositionMember(id, positionMemberData));

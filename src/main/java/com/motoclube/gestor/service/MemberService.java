@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,6 +34,7 @@ public class MemberService {
 
     @Autowired
     private ModelMapper modelMapper;
+
     @Autowired
     private PatentRepository patentRepository;
 
@@ -67,67 +69,85 @@ public class MemberService {
 
     @Transactional
     public MemberData updatePatent(Long memberId, Long patentId) {
-        Optional<Member> optionalMember = repository.findById(memberId);
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
-            var patent = modelMapper.map(patentService.getPatentById(patentId), Patent.class);
+        try {
+            Optional<Member> optionalMember = repository.findById(memberId);
+            if (optionalMember.isPresent()) {
+                Member member = optionalMember.get();
+                var patent = modelMapper.map(patentService.getPatentById(patentId), Patent.class);
 
-            // Save the patent if it is new
-            if (patent.getId() == null) {
-                Patent patentCreated = new Patent(modelMapper.map(patent, PatentData.class));
-                patentRepository.save(patentCreated);
+                // Save the patent if it is new
+                if (patent.getId() == null) {
+                    Patent patentCreated = new Patent(modelMapper.map(patent, PatentData.class));
+                    patentRepository.save(patentCreated);
+                }
 
+                member.setPatent(patent);
+                member.getPatentHistory().add(patent);
+                repository.save(member);
+                return modelMapper.map(member, MemberData.class);
+            } else {
+                throw new ResourceNotFoundException("Id não reconhecido: " + memberId);
             }
-
-            member.setPatent(patent);
-            member.getPatentHistory().add(patent);
-            repository.save(member);
-            return modelMapper.map(member, MemberData.class);
-        } else {
-            throw new RuntimeException("Member not found with id: " + memberId);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar a patente", e);
         }
     }
 
     @Transactional
     public MemberData updatePosition(Long memberId, PositionMember position) {
-        Optional<Member> optionalMember = repository.findById(memberId);
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
+        try {
+            Optional<Member> optionalMember = repository.findById(memberId);
+            if (optionalMember.isPresent()) {
+                Member member = optionalMember.get();
 
-            // Save the position if it is new
-            if (position.getId() == null) {
-                PositionMember positionCreated = new PositionMember(modelMapper.map(position, PositionMemberData.class));
-                positionService.createPositionMember(modelMapper.map(positionCreated, PositionMemberData.class));
+                // Save the position if it is new
+                if (position.getId() == null) {
+                    PositionMember positionCreated = new PositionMember(modelMapper.map(position, PositionMemberData.class));
+                    positionService.createPositionMember(modelMapper.map(positionCreated, PositionMemberData.class));
+                }
+
+                member.setPosition(position);
+                member.getPositionHistory().add(position);
+                repository.save(member);
+                return modelMapper.map(member, MemberData.class);
+            } else {
+                throw new ResourceNotFoundException("Membro com o Id não encontrado: Id: " + memberId);
             }
-
-            member.setPosition(position);
-            member.getPositionHistory().add(position);
-            repository.save(member);
-            return modelMapper.map(member, MemberData.class);
-        } else {
-            throw new RuntimeException("Member not found with id: " + memberId);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar", e);
         }
     }
 
     public MemberDto updateMember(Long id, MemberData memberData) {
-        Optional<Member> optionalMember = repository.findById(id);
-        if (optionalMember.isPresent()) {
-            Member member = optionalMember.get();
-            member.setName(memberData.getName());
-            member.setPhone(memberData.getPhone());
-            member.setAddress(memberData.getAddress());
-            member.setAddress(memberData.getAddress());
-            repository.save(member);
-            return modelMapper.map(member, MemberDto.class);
-        } else {
-            throw new RuntimeException("Member not found with id: " + id);
+        try {
+            Optional<Member> optionalMember = repository.findById(id);
+            if (optionalMember.isPresent()) {
+                Member member = optionalMember.get();
+                member.setName(memberData.getName());
+                member.setPhone(memberData.getPhone());
+                member.setAddress(memberData.getAddress());
+                repository.save(member);
+                return modelMapper.map(member, MemberDto.class);
+            } else {
+                throw new ResourceNotFoundException("Membro não encontrado com o id: " + id);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar", e);
         }
     }
 
     public MemberData updateActive(Long id) {
-        var member = repository.findById(id).orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
-        member.setActive(!member.getActive());
-        repository.save(member);
-        return modelMapper.map(member, MemberData.class);
+        try {
+            var member = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado com o id: " + id));
+            member.setActive(!member.getActive());
+            repository.save(member);
+            return modelMapper.map(member, MemberData.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar o status", e);
+        }
+    }
+
+    public MemberDto getMemberById(Long id) {
+        return modelMapper.map(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado com o id: " + id)), MemberDto.class);
     }
 }
