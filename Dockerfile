@@ -1,18 +1,17 @@
 FROM openjdk:17-alpine
-LABEL authors="Harrisson Dutra"
+LABEL maintainer="Harrisson Dutra"
 
-RUN apt-get update
+# Create a group and user for running the application
+RUN addgroup -S spring && adduser -S spring -G spring
 
-RUN apt-get install openjdk-17-jdk -y
+# Switch to the new user
+USER spring:spring
 
-COPY . .
+# Argument for the JAR file location
+ARG JAR_FILE=target/gestor-0.0.1-SNAPSHOT.jar
 
-RUN apt-get install maven -y
+# Copy the JAR file to the container
+COPY ${JAR_FILE} app.jar
 
-RUN mvn clean install -DskipTests
-
-EXPOSE 8080
-
-COPY /target/gestor-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+# Set the entry point to run the JAR file
+ENTRYPOINT ["java", "-jar", "/app.jar"]
