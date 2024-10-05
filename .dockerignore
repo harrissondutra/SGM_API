@@ -1,6 +1,5 @@
 # flyctl launch added from .gitignore
 **\HELP.md
-**\target
 !**\.mvn\wrapper\maven-wrapper.jar
 !**\**\src\main\**\target
 !**\**\src\test\**\target
@@ -43,9 +42,6 @@ nbdist
 .idea\dataSources
 .idea\dataSources.local.xml
 fly.toml
-
-# Ignore Maven target directory
-target/
 
 # Ignore IDE specific files
 *.iml
