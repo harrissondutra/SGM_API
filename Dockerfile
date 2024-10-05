@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM openjdk:17-alpine
 LABEL authors="Harrisson Dutra"
 
 RUN apt-get update
