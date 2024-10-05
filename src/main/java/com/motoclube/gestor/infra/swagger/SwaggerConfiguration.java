@@ -19,7 +19,7 @@ public class SwaggerConfiguration {
                                          .type(SecurityScheme.Type.HTTP).scheme("bearer")
                                          .bearerFormat("JWT")))  */
                 .info(new Info()
-                        .title("Abutres SGM")
+                        .title("SGM - Sistema de Gerenciamento de Motoclubes")
                         .description("API Rest para gerenciamento de Motoclube\n\n Siga até Authentication, e utilize o usuário padrão descrito na documentação")
                         .contact(new Contact()
                                 .email("harrissondutra@gmail.com"))
