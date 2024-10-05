@@ -43,3 +43,15 @@ nbdist
 .idea\dataSources
 .idea\dataSources.local.xml
 fly.toml
+
+# Ignore Maven target directory
+target/
+
+# Ignore IDE specific files
+*.iml
+.idea/
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
