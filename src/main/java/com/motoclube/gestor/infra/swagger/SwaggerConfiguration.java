@@ -31,7 +31,7 @@ public class SwaggerConfiguration {
                                          .type(SecurityScheme.Type.HTTP).scheme("bearer")
                                          .bearerFormat("JWT")))  */
                 .info(new Info()
-                        .title("SGM - Sistema de Gerenciamento de Motoclubes")
+                        .title("SGM - Sistema Gerenciador de Motoclubes")
                         .description("API Rest para gerenciamento de Motoclubes\n\n")///* Siga até Authentication, e utilize o usuário padrão descrito na documentação*/
                         .contact(new Contact()
                                 .email("harrissondutra@gmail.com"))
