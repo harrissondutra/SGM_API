@@ -44,7 +44,6 @@ nbdist
 fly.toml
 
 # Ignore IDE specific files
-target/
 *.iml
 .idea/
 *.log
