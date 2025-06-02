@@ -39,13 +39,9 @@ nbdist
 # Editor-based HTTP Client requests
 .idea/httpRequests
 # Datasource local storage ignored files
-.idea/dataSources
-.idea/dataSources.local.xml
 fly.toml
 
 # Ignore IDE specific files
-*.iml
-.idea/
 *.log
 
 # Ignore temporary files
