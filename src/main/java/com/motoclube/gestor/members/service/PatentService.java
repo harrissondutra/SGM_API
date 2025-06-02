@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PatentService {
 
@@ -59,5 +61,14 @@ public class PatentService {
             throw new IllegalArgumentException("Id da patente não pode ser nulo");
         }
         repository.deleteById(patentId);
+    }
+
+    public List<PatentData> getPatentsByMotoclubeId(Long motoclubeId) {
+        if (motoclubeId == null) {
+            throw new IllegalArgumentException("Id do Motoclube não pode ser nulo");
+        }
+        return repository.findByMotoclubeId(motoclubeId).stream()
+                .map(patent -> modelMapper.map(patent, PatentData.class))
+                .toList();
     }
 }

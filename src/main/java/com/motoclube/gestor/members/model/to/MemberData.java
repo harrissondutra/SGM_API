@@ -16,4 +16,5 @@ public class MemberData {
     private String cpf;
     private Long patentId;
     private Long positionId;
+    private Long motoclubeId;
 }

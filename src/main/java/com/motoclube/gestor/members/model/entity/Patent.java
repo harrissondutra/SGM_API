@@ -1,5 +1,6 @@
 package com.motoclube.gestor.members.model.entity;
 
+import com.motoclube.gestor.motoclube.model.Motoclube;
 import com.motoclube.gestor.members.model.to.PatentData;
 import com.motoclube.gestor.members.model.to.PatentDataDetails;
 import jakarta.persistence.*;
@@ -19,6 +20,10 @@ public class Patent extends EntityBase {
     private String numeral;
     private String title;
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "motoclube_id")
+    private Motoclube motoclube;
 
     public Patent(PatentData patentData) {
         this.numeral = patentData.getNumeral();

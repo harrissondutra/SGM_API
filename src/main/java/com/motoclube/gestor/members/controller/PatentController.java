@@ -84,4 +84,17 @@ public class PatentController {
         service.deletePatent(patentId);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "Listar patentes por motoclube", description = "Lista todas as patentes de um motoclube pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Patentes listadas com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Motoclube ou patentes não encontradas")
+    })
+    @GetMapping("/motoclube/{motoclubeId}")
+    public ResponseEntity<List<PatentData>> getPatentsByMotoclubeId(@PathVariable Long motoclubeId) {
+        List<PatentData> patents = service.getPatentsByMotoclubeId(motoclubeId);
+        return ResponseEntity.ok(patents);
+    }
+
 }

@@ -50,7 +50,14 @@ public class MemberService {
         PatentDataDetails patent = modelMapper.map(patentService.getPatentById(memberData.getPatentId()), PatentDataDetails.class);
         PositionMemberDataDetails position = modelMapper.map(positionService.getPositionMemberById(memberData.getPositionId()), PositionMemberDataDetails.class);
 
-        // Save the patent and position if they are new
+        // Buscar e setar o Motoclube
+        if (memberData.getMotoclubeId() != null) {
+            Motoclube motoclube = new Motoclube();
+            motoclube.setId(memberData.getMotoclubeId());
+            member.setMotoclubeId(motoclube);
+        }
+
+        // Salvar patente e posição se forem novas
         if (patent.getId() == null) {
             Patent patentCreated = new Patent(patent);
             patentRepository.save(patentCreated);
