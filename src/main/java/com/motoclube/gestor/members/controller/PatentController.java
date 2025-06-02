@@ -91,7 +91,7 @@ public class PatentController {
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "404", description = "Motoclube ou patentes não encontradas")
     })
-    @GetMapping("/motoclube/{motoclubeId}")
+    @GetMapping("/getPatentByIdmotoclube/{motoclubeId}")
     public ResponseEntity<List<PatentData>> getPatentsByMotoclubeId(@PathVariable Long motoclubeId) {
         List<PatentData> patents = service.getPatentsByMotoclubeId(motoclubeId);
         return ResponseEntity.ok(patents);
