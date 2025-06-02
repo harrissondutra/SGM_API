@@ -106,4 +106,15 @@ public class MemberController {
     public ResponseEntity<MemberData> updateActive(@PathVariable Long id) {
         return ResponseEntity.ok(service.updateActive(id));
     }
+    @GetMapping("/motoclube/{motoclubeId}")
+    @Operation(summary = "Listar membros por motoclube", description = "Lista todos os membros de um motoclube pelo ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Membros listados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "404", description = "Motoclube ou membros não encontrados")
+    })
+    public ResponseEntity<List<MemberDto>> getMemberByIdMotoclube(@PathVariable Long motoclubeId) {
+        List<MemberDto> members = service.getMembersByMotoclubeId(motoclubeId);
+        return ResponseEntity.ok(members);
+    }
 }

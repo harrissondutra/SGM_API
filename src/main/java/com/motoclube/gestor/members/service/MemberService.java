@@ -7,6 +7,7 @@ import com.motoclube.gestor.members.model.to.*;
 import com.motoclube.gestor.members.repository.MemberRepository;
 import com.motoclube.gestor.members.repository.PatentHistoryRepository;
 import com.motoclube.gestor.members.repository.PatentRepository;
+import com.motoclube.gestor.motoclube.model.Motoclube;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -149,5 +151,16 @@ public class MemberService {
 
     public MemberDto getMemberById(Long id) {
         return modelMapper.map(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado com o id: " + id)), MemberDto.class);
+    }
+
+    public List<MemberDto> getMembersByMotoclubeId(Long motoclubeId) {
+        Motoclube motoclube = new Motoclube();
+        motoclube.setId(motoclubeId);
+
+        List<Member> members = repository.findMembersByMotoclubeId(motoclube);
+        if (members.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum membro encontrado para o motoclube com o id: " + motoclubeId);
+        }
+        return members.stream().map(member -> modelMapper.map(member, MemberDto.class)).toList();
     }
 }

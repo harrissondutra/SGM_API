@@ -6,6 +6,7 @@ import com.motoclube.gestor.members.enums.DisciplinaryMeasureType;
 import com.motoclube.gestor.members.enums.deserializer.PatentDeserializer;
 import com.motoclube.gestor.members.enums.deserializer.PositionMemberDeserializer;
 import com.motoclube.gestor.members.model.to.MemberData;
+import com.motoclube.gestor.motoclube.model.Motoclube;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +41,11 @@ public class Member extends EntityBase {
     @JsonDeserialize(using = PositionMemberDeserializer.class)
     @JsonProperty("position")
     private PositionMember position;
+
+    // Relacionamento com Motoclube
+    @ManyToOne
+    @JoinColumn(name = "motoclube_id")
+    private Motoclube motoclubeId;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_id")
