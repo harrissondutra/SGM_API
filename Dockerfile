@@ -1,17 +1,17 @@
 FROM openjdk:17-alpine
 LABEL maintainer="Harrisson Dutra"
 
-# Create a group and user for running the application
+# Cria grupo e usuário para rodar a aplicação
 RUN addgroup -S spring && adduser -S spring -G spring
 
-# Switch to the new user
-USER spring:spring
-
-# Argument for the JAR file location
+# Argumento para o local do JAR
 ARG JAR_FILE=target/gestor-0.0.1-SNAPSHOT.jar
 
-# Copy the JAR file to the container
+# Copia o JAR para o container
 COPY ${JAR_FILE} app.jar
 
-# Set the entry point to run the JAR file
+# Altera para o usuário não-root
+USER spring:spring
+
+# Define o entrypoint
 ENTRYPOINT ["java", "-jar", "/app.jar"]
