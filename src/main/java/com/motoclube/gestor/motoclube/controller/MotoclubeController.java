@@ -28,7 +28,7 @@ public class MotoclubeController {
 
     @PostMapping
     public ResponseEntity<MotoclubeDto> criar(@RequestBody MotoclubeDto motoclubeDto) {
-        MotoclubeDto criado = motoclubeService.criar(motoclubeDto);
-        return ResponseEntity.ok(criado);
+        MotoclubeDto motoclube = motoclubeService.criar(motoclubeDto);
+        return ResponseEntity.ok(motoclube);
     }
 }
