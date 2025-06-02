@@ -23,7 +23,6 @@ public class MotoclubeDto {
     private String telefone;
     private String logo;
     private Status status;
-    private Integer membros;
 
     public enum Status {
         ATIVO, INATIVO
